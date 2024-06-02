@@ -1,0 +1,33 @@
+How spark selects join strategy?
+
+Taken directly from spark code:
+
+If it is an '=' join:
+    With hints, looks in given order:
+        1. Broadcast Hint: Pick broadcast hash join if the join type is supported.
+        2. Sort merge hint: Pick sort-merge join if join keys are sortable.
+        3. shuffle hash hint: Pick shuffle hash join if the join type is supported.
+        4. shuffle replicate NL hint: pick cartesian product if join type is inner like.
+    No hints:
+        1. BROADCAST HASH JOIN:
+                If one side is small enough to broadcast, and the join type is supported.
+        2. SHUFFLE HASH JOIN:
+                If one side is small enough to build the local hash map, and is much smaller than the other side, and spark.sql.join.preferSortMergeJoin is false.
+        3. SORT-MERGE JOIN:
+                If join keys are sortable.
+        4. CARTESIAN PRODUCT:
+                If join type is inner like.
+        5. BROADCAST NESTED LOOP JOIN:
+                As the final solution. It may OOM but there is no other choice.
+
+If it's not '=' join:
+    With hints, looks in given order:
+        1. broadcast hint: pick broadcast nested loop join.
+        2. shuffle replicate NL hint: pick cartesian product if join type is inner like.
+    No hints:
+        1. BROADCAST NESTED LOOP JOIN:
+                If one side is small enough to broadcast.
+        2. CARTESIAN PRODUCT:
+                If join type is inner like.
+        3. BROADCAST NESTED LOOP JOIN:
+                As the final solution. It may OOM but we don't have any other choice.

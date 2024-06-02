@@ -1,0 +1,26 @@
++-----------+
+|  AREA NAME|
++-----------+
+|  Hollywood|
+|     Harbor|
+| Devonshire|
+|N Hollywood|
+|     Newton|
+|   Van Nuys|
+|West Valley|
+|    Mission|
+|  Southeast|
+|   Wilshire|
+|    Topanga|
+|    Central|
+|    Pacific|
+| Hollenbeck|
+|    Olympic|
+|  Southwest|
+|   Foothill|
+|    Rampart|
+|    West LA|
+|77th Street|
+|  Northeast|
++-----------+
+

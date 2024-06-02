@@ -1,0 +1,62 @@
+
+Highest 3
++------------------------------+-------------+
+|victim descent                |total victims|
++------------------------------+-------------+
+|White                         |5020         |
+|Other                         |1816         |
+|Hispanic/Latin/Mexican        |761          |
+|Black                         |327          |
+|Unknown                       |211          |
+|Other Asian                   |185          |
+|Chinese                       |6            |
+|Filipino                      |4            |
+|American Indian/Alaskan Native|3            |
+|Korean                        |3            |
+|Hawaiian                      |2            |
+|Pacific Islander              |2            |
++------------------------------+-------------+
+
+Lowest 3
++------------------------------+-------------+
+|victim descent                |total victims|
++------------------------------+-------------+
+|Hispanic/Latin/Mexican        |14824        |
+|Black                         |10458        |
+|White                         |6999         |
+|Other                         |3424         |
+|Other Asian                   |1071         |
+|Unknown                       |682          |
+|Korean                        |90           |
+|Chinese                       |30           |
+|Japanese                      |25           |
+|Filipino                      |24           |
+|American Indian/Alaskan Native|10           |
+|Vietnamese                    |3            |
+|Cambodian                     |2            |
+|Hawaiian                      |2            |
+|Pacific Islander              |2            |
+|Asian Indian                  |1            |
++------------------------------+-------------+
+
+
+times
+
+default (broadcast, merge, merge)                               : 22.870, 21.809, 22.674
+broadcast                                                       : 27.222
+shuffle-hash                                                    : 21.209, 21.409
+merge-sort                                                      : 23.568, 23.708
+shuffle-replicate-nl                                            : 72.155, 75.000
+optimized - correct side (broadcast, shuffle-hash, broadcast)   : 21.771, 21.559, 21.288
+optimized - correct side (broadcast, broadcast, broadcast)      : 21.212
+
+
+
+default joins:  SortMergeJoin( SortMergeJoin ( BroadcastHashJoin ) )
+
+df_revgeo_h = df_revgeo.join(df_income_highest3, ['Zip Code'], how='inner')
+-> BroadcastHashJoin, because df_income_highest3 only 3 rows
+
+df_join_h = df.join(df_revgeo_h, ['LAT', 'LON'], how='inner')
+-> SortMergeJoin
+

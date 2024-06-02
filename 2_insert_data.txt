@@ -1,0 +1,21 @@
+
+# make a directory
+hadoop fs -mkdir crime_data
+
+# put data in hdfs
+hadoop fs -put 'Crime_Data_from_2010_to_2019.csv' crime_data
+hadoop fs -put 'Crime_Data_from_2020_to_Present.csv' crime_data
+
+
+
+
+
+# hadoop fs -ls hdfs://master:9000/
+# hadoop fs -ls hdfs://master:9000/user
+# hadoop fs -ls hdfs://master:9000/user/osboxes
+# hadoop fs -ls
+# hadoop fs -rm -r test
+
+# echo lalala > testfile
+# hadoop fs -getmerge test ./gettest.txt
+

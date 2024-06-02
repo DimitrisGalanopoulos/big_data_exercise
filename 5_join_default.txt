@@ -1,0 +1,216 @@
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+24/05/29 15:00:09 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Reading income csv
+Reading reverse geocoding csv
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Project [Zip Code#101, LAT#97, LON#99, latlon#85, Community#40, Estimated Median Income#41L]
+   +- BroadcastHashJoin [Zip Code#101], [Zip Code#39], Inner, BuildLeft, false
+      :- BroadcastExchange HashedRelationBroadcastMode(List(input[2, string, false]),false), [plan_id=197]
+      :  +- Filter isnotnull(Zip Code#101)
+      :     +- SortAggregate(key=[latlon#85], functions=[first(LAT#73, false), first(LON#74, false), first(Zip Code#79, false)])
+      :        +- Sort [latlon#85 ASC NULLS FIRST], false, 0
+      :           +- Exchange hashpartitioning(latlon#85, 200), ENSURE_REQUIREMENTS, [plan_id=192]
+      :              +- SortAggregate(key=[latlon#85], functions=[partial_first(LAT#73, false), partial_first(LON#74, false), partial_first(Zip Code#79, false)])
+      :                 +- Sort [latlon#85 ASC NULLS FIRST], false, 0
+      :                    +- Project [LAT#73, LON#74, ZIPcode#75 AS Zip Code#79, pythonUDF0#102 AS latlon#85]
+      :                       +- BatchEvalPython [<lambda>(LAT#73, LON#74)#84], [pythonUDF0#102]
+      :                          +- FileScan csv [LAT#73,LON#74,ZIPcode#75] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://master:9000/user/osboxes/Median_Household_Income_by_Zip_Code-Lo..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<LAT:string,LON:string,ZIPcode:string>
+      +- Filter isnotnull(Zip Code#39)
+         +- Scan ExistingRDD[Zip Code#39,Community#40,Estimated Median Income#41L]
+
+
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Project [Zip Code#129, LAT#125, LON#127, latlon#85, Community#51, Estimated Median Income#52L]
+   +- BroadcastHashJoin [Zip Code#129], [Zip Code#50], Inner, BuildLeft, false
+      :- BroadcastExchange HashedRelationBroadcastMode(List(input[2, string, false]),false), [plan_id=247]
+      :  +- Filter isnotnull(Zip Code#129)
+      :     +- SortAggregate(key=[latlon#85], functions=[first(LAT#73, false), first(LON#74, false), first(Zip Code#79, false)])
+      :        +- Sort [latlon#85 ASC NULLS FIRST], false, 0
+      :           +- Exchange hashpartitioning(latlon#85, 200), ENSURE_REQUIREMENTS, [plan_id=242]
+      :              +- SortAggregate(key=[latlon#85], functions=[partial_first(LAT#73, false), partial_first(LON#74, false), partial_first(Zip Code#79, false)])
+      :                 +- Sort [latlon#85 ASC NULLS FIRST], false, 0
+      :                    +- Project [LAT#73, LON#74, ZIPcode#75 AS Zip Code#79, pythonUDF0#130 AS latlon#85]
+      :                       +- BatchEvalPython [<lambda>(LAT#73, LON#74)#84], [pythonUDF0#130]
+      :                          +- FileScan csv [LAT#73,LON#74,ZIPcode#75] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://master:9000/user/osboxes/Median_Household_Income_by_Zip_Code-Lo..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<LAT:string,LON:string,ZIPcode:string>
+      +- Filter isnotnull(Zip Code#50)
+         +- Scan ExistingRDD[Zip Code#50,Community#51,Estimated Median Income#52L]
+
+
+Reading data csv
+24/05/29 15:00:20 WARN SparkStringUtils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Project [LAT#189, LON#190, DR_NO#163, Date Rptd#164, DATE OCC#165, TIME OCC#166, AREA #167, AREA NAME#168, Rpt Dist No#169, Part 1-2#170, Crm Cd#171, Crm Cd Desc#172, Mocodes#173, Vict Age#174, Vict Sex#175, Vict Descent#176, Premis Cd#177, Premis Desc#178, Weapon Used Cd#179, Weapon Desc#180, Status#181, Status Desc#182, Crm Cd 1#183, Crm Cd 2#184, ... 5 more fields]
+   +- SortMergeJoin [LAT#189, LON#190], [LAT#250, LON#252], Inner
+      :- Sort [LAT#189 ASC NULLS FIRST, LON#190 ASC NULLS FIRST], false, 0
+      :  +- Exchange hashpartitioning(LAT#189, LON#190, 200), ENSURE_REQUIREMENTS, [plan_id=343]
+      :     +- Filter ((isnotnull(Vict Descent#176) AND isnotnull(LAT#189)) AND isnotnull(LON#190))
+      :        +- FileScan csv [DR_NO#163,Date Rptd#164,DATE OCC#165,TIME OCC#166,AREA #167,AREA NAME#168,Rpt Dist No#169,Part 1-2#170,Crm Cd#171,Crm Cd Desc#172,Mocodes#173,Vict Age#174,Vict Sex#175,Vict Descent#176,Premis Cd#177,Premis Desc#178,Weapon Used Cd#179,Weapon Desc#180,Status#181,Status Desc#182,Crm Cd 1#183,Crm Cd 2#184,Crm Cd 3#185,Crm Cd 4#186,... 4 more fields] Batched: false, DataFilters: [isnotnull(Vict Descent#176), isnotnull(LAT#189), isnotnull(LON#190)], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://master:9000/user/osboxes/crime_data/Crime_Data_from_2010_to_201..., PartitionFilters: [], PushedFilters: [IsNotNull(Vict Descent), IsNotNull(LAT), IsNotNull(LON)], ReadSchema: struct<DR_NO:string,Date Rptd:string,DATE OCC:string,TIME OCC:string,AREA :string,AREA NAME:strin...
+      +- Sort [LAT#250 ASC NULLS FIRST, LON#252 ASC NULLS FIRST], false, 0
+         +- Exchange hashpartitioning(LAT#250, LON#252, 200), ENSURE_REQUIREMENTS, [plan_id=344]
+            +- Project [Zip Code#254, LAT#250, LON#252]
+               +- BroadcastHashJoin [Zip Code#254], [Zip Code#39], Inner, BuildLeft, false
+                  :- BroadcastExchange HashedRelationBroadcastMode(List(input[2, string, false]),false), [plan_id=338]
+                  :  +- Filter (isnotnull(Zip Code#254) AND (isnotnull(LAT#250) AND isnotnull(LON#252)))
+                  :     +- SortAggregate(key=[latlon#85], functions=[first(LAT#73, false), first(LON#74, false), first(Zip Code#79, false)])
+                  :        +- Sort [latlon#85 ASC NULLS FIRST], false, 0
+                  :           +- Exchange hashpartitioning(latlon#85, 200), ENSURE_REQUIREMENTS, [plan_id=333]
+                  :              +- SortAggregate(key=[latlon#85], functions=[partial_first(LAT#73, false), partial_first(LON#74, false), partial_first(Zip Code#79, false)])
+                  :                 +- Sort [latlon#85 ASC NULLS FIRST], false, 0
+                  :                    +- Project [LAT#73, LON#74, ZIPcode#75 AS Zip Code#79, pythonUDF0#255 AS latlon#85]
+                  :                       +- BatchEvalPython [<lambda>(LAT#73, LON#74)#84], [pythonUDF0#255]
+                  :                          +- FileScan csv [LAT#73,LON#74,ZIPcode#75] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://master:9000/user/osboxes/Median_Household_Income_by_Zip_Code-Lo..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<LAT:string,LON:string,ZIPcode:string>
+                  +- Project [Zip Code#39]
+                     +- Filter isnotnull(Zip Code#39)
+                        +- Scan ExistingRDD[Zip Code#39,Community#40,Estimated Median Income#41L]
+
+
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Project [Vict Descent#176, total victims#276L, Vict Descent text#1]
+   +- SortMergeJoin [Vict Descent#176], [Vict Descent#0], Inner
+      :- Sort [Vict Descent#176 ASC NULLS FIRST], false, 0
+      :  +- HashAggregate(keys=[Vict Descent#176], functions=[count(1)])
+      :     +- Exchange hashpartitioning(Vict Descent#176, 200), ENSURE_REQUIREMENTS, [plan_id=458]
+      :        +- HashAggregate(keys=[Vict Descent#176], functions=[partial_count(1)])
+      :           +- Project [Vict Descent#176]
+      :              +- SortMergeJoin [LAT#189, LON#190], [LAT#283, LON#285], Inner
+      :                 :- Sort [LAT#189 ASC NULLS FIRST, LON#190 ASC NULLS FIRST], false, 0
+      :                 :  +- Exchange hashpartitioning(LAT#189, LON#190, 200), ENSURE_REQUIREMENTS, [plan_id=450]
+      :                 :     +- Filter ((isnotnull(Vict Descent#176) AND isnotnull(LAT#189)) AND isnotnull(LON#190))
+      :                 :        +- FileScan csv [Vict Descent#176,LAT#189,LON#190] Batched: false, DataFilters: [isnotnull(Vict Descent#176), isnotnull(LAT#189), isnotnull(LON#190)], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://master:9000/user/osboxes/crime_data/Crime_Data_from_2010_to_201..., PartitionFilters: [], PushedFilters: [IsNotNull(Vict Descent), IsNotNull(LAT), IsNotNull(LON)], ReadSchema: struct<Vict Descent:string,LAT:string,LON:string>
+      :                 +- Sort [LAT#283 ASC NULLS FIRST, LON#285 ASC NULLS FIRST], false, 0
+      :                    +- Exchange hashpartitioning(LAT#283, LON#285, 200), ENSURE_REQUIREMENTS, [plan_id=451]
+      :                       +- Project [LAT#283, LON#285]
+      :                          +- BroadcastHashJoin [Zip Code#287], [Zip Code#39], Inner, BuildLeft, false
+      :                             :- BroadcastExchange HashedRelationBroadcastMode(List(input[2, string, false]),false), [plan_id=445]
+      :                             :  +- Filter (isnotnull(Zip Code#287) AND (isnotnull(LAT#283) AND isnotnull(LON#285)))
+      :                             :     +- SortAggregate(key=[latlon#85], functions=[first(LAT#73, false), first(LON#74, false), first(Zip Code#79, false)])
+      :                             :        +- Sort [latlon#85 ASC NULLS FIRST], false, 0
+      :                             :           +- Exchange hashpartitioning(latlon#85, 200), ENSURE_REQUIREMENTS, [plan_id=440]
+      :                             :              +- SortAggregate(key=[latlon#85], functions=[partial_first(LAT#73, false), partial_first(LON#74, false), partial_first(Zip Code#79, false)])
+      :                             :                 +- Sort [latlon#85 ASC NULLS FIRST], false, 0
+      :                             :                    +- Project [LAT#73, LON#74, ZIPcode#75 AS Zip Code#79, pythonUDF0#288 AS latlon#85]
+      :                             :                       +- BatchEvalPython [<lambda>(LAT#73, LON#74)#84], [pythonUDF0#288]
+      :                             :                          +- FileScan csv [LAT#73,LON#74,ZIPcode#75] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://master:9000/user/osboxes/Median_Household_Income_by_Zip_Code-Lo..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<LAT:string,LON:string,ZIPcode:string>
+      :                             +- Project [Zip Code#39]
+      :                                +- Filter isnotnull(Zip Code#39)
+      :                                   +- Scan ExistingRDD[Zip Code#39,Community#40,Estimated Median Income#41L]
+      +- Sort [Vict Descent#0 ASC NULLS FIRST], false, 0
+         +- Exchange hashpartitioning(Vict Descent#0, 200), ENSURE_REQUIREMENTS, [plan_id=462]
+            +- Filter isnotnull(Vict Descent#0)
+               +- Scan ExistingRDD[Vict Descent#0,Vict Descent text#1]
+
+
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Project [LAT#189, LON#190, DR_NO#163, Date Rptd#164, DATE OCC#165, TIME OCC#166, AREA #167, AREA NAME#168, Rpt Dist No#169, Part 1-2#170, Crm Cd#171, Crm Cd Desc#172, Mocodes#173, Vict Age#174, Vict Sex#175, Vict Descent#176, Premis Cd#177, Premis Desc#178, Weapon Used Cd#179, Weapon Desc#180, Status#181, Status Desc#182, Crm Cd 1#183, Crm Cd 2#184, ... 5 more fields]
+   +- SortMergeJoin [LAT#189, LON#190], [LAT#335, LON#337], Inner
+      :- Sort [LAT#189 ASC NULLS FIRST, LON#190 ASC NULLS FIRST], false, 0
+      :  +- Exchange hashpartitioning(LAT#189, LON#190, 200), ENSURE_REQUIREMENTS, [plan_id=541]
+      :     +- Filter ((isnotnull(Vict Descent#176) AND isnotnull(LAT#189)) AND isnotnull(LON#190))
+      :        +- FileScan csv [DR_NO#163,Date Rptd#164,DATE OCC#165,TIME OCC#166,AREA #167,AREA NAME#168,Rpt Dist No#169,Part 1-2#170,Crm Cd#171,Crm Cd Desc#172,Mocodes#173,Vict Age#174,Vict Sex#175,Vict Descent#176,Premis Cd#177,Premis Desc#178,Weapon Used Cd#179,Weapon Desc#180,Status#181,Status Desc#182,Crm Cd 1#183,Crm Cd 2#184,Crm Cd 3#185,Crm Cd 4#186,... 4 more fields] Batched: false, DataFilters: [isnotnull(Vict Descent#176), isnotnull(LAT#189), isnotnull(LON#190)], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://master:9000/user/osboxes/crime_data/Crime_Data_from_2010_to_201..., PartitionFilters: [], PushedFilters: [IsNotNull(Vict Descent), IsNotNull(LAT), IsNotNull(LON)], ReadSchema: struct<DR_NO:string,Date Rptd:string,DATE OCC:string,TIME OCC:string,AREA :string,AREA NAME:strin...
+      +- Sort [LAT#335 ASC NULLS FIRST, LON#337 ASC NULLS FIRST], false, 0
+         +- Exchange hashpartitioning(LAT#335, LON#337, 200), ENSURE_REQUIREMENTS, [plan_id=542]
+            +- Project [Zip Code#339, LAT#335, LON#337]
+               +- BroadcastHashJoin [Zip Code#339], [Zip Code#50], Inner, BuildLeft, false
+                  :- BroadcastExchange HashedRelationBroadcastMode(List(input[2, string, false]),false), [plan_id=536]
+                  :  +- Filter (isnotnull(Zip Code#339) AND (isnotnull(LAT#335) AND isnotnull(LON#337)))
+                  :     +- SortAggregate(key=[latlon#85], functions=[first(LAT#73, false), first(LON#74, false), first(Zip Code#79, false)])
+                  :        +- Sort [latlon#85 ASC NULLS FIRST], false, 0
+                  :           +- Exchange hashpartitioning(latlon#85, 200), ENSURE_REQUIREMENTS, [plan_id=531]
+                  :              +- SortAggregate(key=[latlon#85], functions=[partial_first(LAT#73, false), partial_first(LON#74, false), partial_first(Zip Code#79, false)])
+                  :                 +- Sort [latlon#85 ASC NULLS FIRST], false, 0
+                  :                    +- Project [LAT#73, LON#74, ZIPcode#75 AS Zip Code#79, pythonUDF0#340 AS latlon#85]
+                  :                       +- BatchEvalPython [<lambda>(LAT#73, LON#74)#84], [pythonUDF0#340]
+                  :                          +- FileScan csv [LAT#73,LON#74,ZIPcode#75] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://master:9000/user/osboxes/Median_Household_Income_by_Zip_Code-Lo..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<LAT:string,LON:string,ZIPcode:string>
+                  +- Project [Zip Code#50]
+                     +- Filter isnotnull(Zip Code#50)
+                        +- Scan ExistingRDD[Zip Code#50,Community#51,Estimated Median Income#52L]
+
+
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Project [Vict Descent#176, total victims#361L, Vict Descent text#1]
+   +- SortMergeJoin [Vict Descent#176], [Vict Descent#0], Inner
+      :- Sort [Vict Descent#176 ASC NULLS FIRST], false, 0
+      :  +- HashAggregate(keys=[Vict Descent#176], functions=[count(1)])
+      :     +- Exchange hashpartitioning(Vict Descent#176, 200), ENSURE_REQUIREMENTS, [plan_id=656]
+      :        +- HashAggregate(keys=[Vict Descent#176], functions=[partial_count(1)])
+      :           +- Project [Vict Descent#176]
+      :              +- SortMergeJoin [LAT#189, LON#190], [LAT#368, LON#370], Inner
+      :                 :- Sort [LAT#189 ASC NULLS FIRST, LON#190 ASC NULLS FIRST], false, 0
+      :                 :  +- Exchange hashpartitioning(LAT#189, LON#190, 200), ENSURE_REQUIREMENTS, [plan_id=648]
+      :                 :     +- Filter ((isnotnull(Vict Descent#176) AND isnotnull(LAT#189)) AND isnotnull(LON#190))
+      :                 :        +- FileScan csv [Vict Descent#176,LAT#189,LON#190] Batched: false, DataFilters: [isnotnull(Vict Descent#176), isnotnull(LAT#189), isnotnull(LON#190)], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://master:9000/user/osboxes/crime_data/Crime_Data_from_2010_to_201..., PartitionFilters: [], PushedFilters: [IsNotNull(Vict Descent), IsNotNull(LAT), IsNotNull(LON)], ReadSchema: struct<Vict Descent:string,LAT:string,LON:string>
+      :                 +- Sort [LAT#368 ASC NULLS FIRST, LON#370 ASC NULLS FIRST], false, 0
+      :                    +- Exchange hashpartitioning(LAT#368, LON#370, 200), ENSURE_REQUIREMENTS, [plan_id=649]
+      :                       +- Project [LAT#368, LON#370]
+      :                          +- BroadcastHashJoin [Zip Code#372], [Zip Code#50], Inner, BuildLeft, false
+      :                             :- BroadcastExchange HashedRelationBroadcastMode(List(input[2, string, false]),false), [plan_id=643]
+      :                             :  +- Filter (isnotnull(Zip Code#372) AND (isnotnull(LAT#368) AND isnotnull(LON#370)))
+      :                             :     +- SortAggregate(key=[latlon#85], functions=[first(LAT#73, false), first(LON#74, false), first(Zip Code#79, false)])
+      :                             :        +- Sort [latlon#85 ASC NULLS FIRST], false, 0
+      :                             :           +- Exchange hashpartitioning(latlon#85, 200), ENSURE_REQUIREMENTS, [plan_id=638]
+      :                             :              +- SortAggregate(key=[latlon#85], functions=[partial_first(LAT#73, false), partial_first(LON#74, false), partial_first(Zip Code#79, false)])
+      :                             :                 +- Sort [latlon#85 ASC NULLS FIRST], false, 0
+      :                             :                    +- Project [LAT#73, LON#74, ZIPcode#75 AS Zip Code#79, pythonUDF0#373 AS latlon#85]
+      :                             :                       +- BatchEvalPython [<lambda>(LAT#73, LON#74)#84], [pythonUDF0#373]
+      :                             :                          +- FileScan csv [LAT#73,LON#74,ZIPcode#75] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[hdfs://master:9000/user/osboxes/Median_Household_Income_by_Zip_Code-Lo..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<LAT:string,LON:string,ZIPcode:string>
+      :                             +- Project [Zip Code#50]
+      :                                +- Filter isnotnull(Zip Code#50)
+      :                                   +- Scan ExistingRDD[Zip Code#50,Community#51,Estimated Median Income#52L]
+      +- Sort [Vict Descent#0 ASC NULLS FIRST], false, 0
+         +- Exchange hashpartitioning(Vict Descent#0, 200), ENSURE_REQUIREMENTS, [plan_id=660]
+            +- Filter isnotnull(Vict Descent#0)
+               +- Scan ExistingRDD[Vict Descent#0,Vict Descent text#1]
+
+
+Highest 3
++------------------------------+-------------+
+|victim descent                |total victims|
++------------------------------+-------------+
+|White                         |5020         |
+|Other                         |1816         |
+|Hispanic/Latin/Mexican        |761          |
+|Black                         |327          |
+|Unknown                       |211          |
+|Other Asian                   |185          |
+|Chinese                       |6            |
+|Filipino                      |4            |
+|American Indian/Alaskan Native|3            |
+|Korean                        |3            |
+|Hawaiian                      |2            |
+|Pacific Islander              |2            |
++------------------------------+-------------+
+
+Lowest 3
++------------------------------+-------------+
+|victim descent                |total victims|
++------------------------------+-------------+
+|Hispanic/Latin/Mexican        |14824        |
+|Black                         |10458        |
+|White                         |6999         |
+|Other                         |3424         |
+|Other Asian                   |1071         |
+|Unknown                       |682          |
+|Korean                        |90           |
+|Chinese                       |30           |
+|Japanese                      |25           |
+|Filipino                      |24           |
+|American Indian/Alaskan Native|10           |
+|Vietnamese                    |3            |
+|Cambodian                     |2            |
+|Hawaiian                      |2            |
+|Pacific Islander              |2            |
+|Asian Indian                  |1            |
++------------------------------+-------------+
+
+
+real    0m23.030s
+user    0m0.712s
+sys     0m0.334s
+
