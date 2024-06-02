@@ -10,8 +10,8 @@ import geopy.distance
 import datetime
 
 
-# join_method = 0
-join_method = 1
+# join_method = 0   # broadcast
+join_method = 1   # repartition
 
 
 spark = SparkSession \
